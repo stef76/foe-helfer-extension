@@ -43,11 +43,12 @@ let Outposts = {
 		if( $('#outpostConsumables').length === 0 )
 		{
 			let args = {
-				'id': 'outpostConsumables',
-				'title': i18n('Boxes.Outpost.Title'),
-				'auto_close': true,
-				'dragdrop': true,
-				'minimize': true
+				id: 'outpostConsumables',
+				title: i18n('Boxes.Outpost.Title'),
+				auto_close: true,
+				dragdrop: true,
+				minimize: true,
+				popout: 'Outposts.PopOutBox()'
 			};
 
 			HTML.Box(args);
@@ -303,7 +304,8 @@ let Outposts = {
 		t.push('<th class="text-center">' + i18n('Boxes.Outpost.TitleFree') + '</th>');
 
 		// Güter durchgehen
-		for (let resourceID of resourceIDs) {
+		for (let resourceID of resourceIDs)
+		{
 			let IconID = resourceID;
 			if (resourceID === 'barley' || resourceID === 'pottery' || resourceID === 'flowers' || resourceID === 'sacrificial_offerings') IconID = 'fine_' + IconID;
 			t.push(`<th class="text-center"><span class="goods-sprite-50 ${IconID} goods-name" title="${GoodsData[resourceID].name}"></span></th>`);
@@ -613,6 +615,48 @@ let Outposts = {
 				Outposts.GUINeedsUpdate = true;
 				requestAnimationFrame(Outposts.BuildInfoBoxContent);
 			}
+		}
+	},
+
+
+	PopOutBox: ()=> {
+		/*
+		let winObj = HTML.PopOutBoxBuilder({
+			id: 'outpostConsumables',
+			title: 'PopOut Test - ' + i18n('Boxes.Outpost.Title'),
+			width: 720,
+			height: 400
+		})
+		*/
+
+
+
+		let id = 'outpostConsumables',
+			content = $('#outpostConsumablesBody').html(),
+			winHtml = `<!DOCTYPE html>
+						<html>
+							<head id="popout-${id}-head">
+								<title>PopOut Test - ${i18n('Boxes.Outpost.Title')}</title>
+								<link rel="stylesheet" href="${extUrl}css/web/variables.css">
+								<link rel="stylesheet" href="${extUrl}css/web/boxes.css">
+								<link rel="stylesheet" href="${extUrl}css/web/goods.css">
+								<link rel="stylesheet" href="${extUrl}js/web/outposts/css/outposts.css">
+							</head>
+							<body class="popup-body" id="outpostConsumablesBody">${content}</body>
+						</html>`;
+
+		const winUrl = URL.createObjectURL(
+			new Blob([winHtml], { type: "text/html;charset=utf8" })
+		);
+
+		const winObj = window.open(
+			winUrl,
+			`popOut-outpostConsumables`,
+			`width=720,height=400,screenX=200,screenY=200`
+		);
+
+		winObj.onload = ()=> {
+			$('#outpostConsumables').remove();
 		}
 	}
 };

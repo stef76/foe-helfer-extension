@@ -125,7 +125,7 @@ let HTML = {
 	customFunctions: [],
 
 	/**
-	 * Erzeugt eine HTML Box im DOM
+	 * Creates an HTML box in the DOM
 	 *
 	 * id
 	 * title
@@ -178,6 +178,26 @@ let HTML = {
 			}
 		}
 
+		if(args['popout']){
+			let set = $('<span />').addClass('window-settings').attr('id', `${args['id']}-popout`);
+			set.insertAfter(title);
+
+			if (typeof args['popout'] !== 'boolean')
+			{
+				HTML.customFunctions[`${args['id']}PopOut`] = args['popout'];
+			}
+		}
+
+		if(args['map']){
+			let set = $('<span />').addClass('window-map').attr('id', `${args['id']}-map`);
+			set.insertAfter(title);
+
+			if (typeof args['map'] !== 'boolean')
+			{
+				HTML.customFunctions[`${args['id']}Map`] = args['map'];
+			}
+		}
+
 		// Lautsprecher für Töne
 		if(args['speaker']){
 			let spk = $('<span />').addClass('window-speaker').attr('id', args['speaker']);
@@ -210,6 +230,10 @@ let HTML = {
 
 			if(args['auto_close']){
 				$(`#${args.id}`).on('click', `#${args['id']}close`, function(){
+
+					// remove settings box if open
+					$(`#${args.id}`).find('.settingsbox-wrapper').remove();
+
 					$('#' + args['id']).fadeToggle('fast', function(){
 						$(this).remove();
 					});
@@ -255,6 +279,38 @@ let HTML = {
 				}
 			}
 
+			if(args['popout'])
+			{
+				if (typeof args['popout'] !== 'boolean')
+				{
+					$(`#${args['id']}`).on('click', `#${args['id']}-popout`, function(){
+						HTML.PopOutBox(args['id']);
+					});
+				}
+			}
+			
+			if(args['map'])
+			{
+				if (typeof args['map'] !== 'boolean')
+				{
+					$(`#${args['id']}`).on('click', `#${args['id']}-map`, function(){
+
+						// exist? remove!
+						if( $(`#${args['id']}MapBox`).length > 0 )
+						{
+							$(`#${args['id']}MapBox`).fadeToggle('fast', function(){
+								$(this).remove();
+							});
+						}
+
+						// create a new one
+						else {
+							HTML.MapBox(args['id']);
+						}
+					});
+				}
+			}
+
 			if(args['resize']) {
 				HTML.Resizeable(args['id'], args['keepRatio']);
 			}
@@ -293,11 +349,14 @@ let HTML = {
 		$(btn).bind('click', function(){
 			let box = $(this).closest('.window-box'),
 				open = box.hasClass('open');
-			if(open === true){
+
+			if(open === true)
+			{
 				box.removeClass('open');
 				box.addClass('closed');
 				box.find('.window-body').css("visibility", "hidden");
-			} else {
+			}
+			else {
 				box.removeClass('closed');
 				box.addClass('open');
 				box.find('.window-body').css("visibility", "visible");
@@ -307,7 +366,7 @@ let HTML = {
 
 
 	/**
-	 * Makes an HTML BOX DragAble
+	 * Makes an HTML BOX Dragable
 	 *
 	 * @param el
 	 * @param save
@@ -455,6 +514,18 @@ let HTML = {
 
 		setTimeout(()=> {
 			new Function(`${HTML.customFunctions[id + 'Settings']}`)();
+		}, 100);
+	},
+
+
+	PopOutBox: (id)=> {
+		new Function(`${HTML.customFunctions[id + 'PopOut']}`)();
+	},
+
+
+	MapBox: (id)=> {
+		setTimeout(()=> {
+			new Function(`${HTML.customFunctions[id + 'Map']}`)();
 		}, 100);
 	},
 
@@ -628,5 +699,50 @@ let HTML = {
 
 	LeaveFullscreen:()=> {
 
+	},
+
+
+	ShowToastMsg: (d)=> {
+
+		if (!Settings.GetSetting('ShowNotifications') && !d['show']) return;
+
+		$.toast({
+			heading: d['head'],
+			text: d['text'],
+			icon: d['type'],
+			hideAfter: d['hideAfter'],
+			position: Settings.GetSetting('NotificationsPosition', true),
+			extraClass: localStorage.getItem('SelectedMenu') || 'bottombar',
+			stack: localStorage.getItem('NotificationStack') || 4
+		});
+	},
+
+
+	PopOutBoxBuilder: (params)=> {
+
+		let id = params['id'];
+
+		const winHtml = `<!DOCTYPE html>
+						<html>
+							<head id="popout-${id}-head">
+								<title>PopOut Test - ${i18n('Boxes.Outpost.Title')}</title>
+								<link rel="stylesheet" href="${extUrl}css/web/variables.css">
+								<link rel="stylesheet" href="${extUrl}css/web/boxes.css">
+								<link rel="stylesheet" href="${extUrl}css/web/goods.css">
+							</head>
+							<body id="popout-${id}-body"></body>
+						</html>`;
+
+		const winUrl = URL.createObjectURL(
+			new Blob([winHtml], { type: "text/html" })
+		);
+
+		const winObject = window.open(
+			winUrl,
+			`popOut-${id}`,
+			`width=${params['width']},height=${params['height']},screenX=200,screenY=200`
+		);
+
+		return winObject;
 	}
 };
