@@ -1,6 +1,68 @@
 ## Changelog - Extension
 
 
+##### 2.5.6.3
+
+**Update**
+- Investment overview:
+    - [#1871](https://github.com/dsiekiera/foe-helfer-extension/issues/1871) No more data is sent to foe-rechner.de
+
+- Research Cost Calculator:
+    - [#1897](https://github.com/dsiekiera/foe-helfer-extension/issues/1897) As of this update, the Age of Venus is correctly recognised.
+
+- Guild Battles:
+    - We have rewritten the view of the guild battles box, for clarity
+
+- Moppelassistent:
+    - [#1912](https://github.com/dsiekiera/foe-helfer-extension/issues/1912) The sorting of names didn't work properly, it works now
+
+- LG Investments:
+    - Option to take goods production into account
+
+- Bonus Bar:
+    - [#1915](https://github.com/dsiekiera/foe-helfer-extension/issues/1915) Bonus Bar now also shows completed quests
+
+**BugFix**
+- Extension:
+    - [#1892](https://github.com/dsiekiera/foe-helfer-extension/issues/1892) A double quote could destroy a tooltip
+
+- Negotiation Wizard:
+    - [#1879](https://github.com/dsiekiera/foe-helfer-extension/issues/1879) Sometimes the number of moves was not detected correctly, this has been fixed.
+
+- Own contribution calculator:
+    - [#1891](https://github.com/dsiekiera/foe-helfer-extension/issues/1891) Done own share was calculated wrong if deleted player had deposited something
+
+- Building kits:
+    - [#1910](https://github.com/dsiekiera/foe-helfer-extension/issues/1910) The number is now calculated correctly
+
+---
+
+
+##### 2.5.6.2
+
+**Update**
+- Production Overview:
+    - [#1668](https://github.com/dsiekiera/foe-helfer-extension/issues/1668) Attack and Defence have been added as new tabs.
+
+- Guild Battles:
+    - improved view if province has no owner yet
+
+- Investments:
+    - [#1853](https://github.com/dsiekiera/foe-helfer-extension/issues/1853) Investments can be ignored - and squares can be shown as "safe" only
+
+**BugFix**
+- Menu:
+    - [#1861](https://github.com/dsiekiera/foe-helfer-extension/issues/1861) Due to a case sensitive bug, the alert icon could not be moved, or disappeared
+
+- Alerts:
+    - [#1848](https://github.com/dsiekiera/foe-helfer-extension/issues/1848) Firefox bug: alert could not be created
+
+- Investments:
+    - [#1854](https://github.com/dsiekiera/foe-helfer-extension/issues/1854) Wrong sorting of entry time for investments corrected
+
+---
+
+
 ##### 2.5.6.1
 
 **Update**
